@@ -46,15 +46,30 @@ void TutorialApplication::createScene(void)
     Ogre::Entity* entGround = mSceneMgr->createEntity("GroundEntity", "ground");
     mSceneMgr->getRootSceneNode()->createChildSceneNode()->attachObject(entGround);
     
-    // light
     entGround->setMaterialName("Examples/Rockwall");
     entGround->setCastShadows(false);
     
+    // light
     Ogre::Light* pointLight = mSceneMgr->createLight("pointLight");
     pointLight->setType(Ogre::Light::LT_POINT);
     pointLight->setPosition(Ogre::Vector3(0, 150, 250));
     
+    pointLight->setDiffuseColour(1.0, 0.0, 0.0);
+    pointLight->setSpecularColour(1.0, 0.0, 0.0);
     
+    Ogre::Light* directionalLight = mSceneMgr->createLight("directionalLight");
+    directionalLight->setType(Ogre::Light::LT_DIRECTIONAL);
+    directionalLight->setDiffuseColour(Ogre::ColourValue(.25, .25, 0));
+    directionalLight->setSpecularColour(Ogre::ColourValue(.25, .25, 0));
+    directionalLight->setDirection(Ogre::Vector3( 0, -1, 1 ));
+    
+    Ogre::Light* spotLight = mSceneMgr->createLight("spotLight");
+    spotLight->setType(Ogre::Light::LT_SPOTLIGHT);
+    spotLight->setDiffuseColour(0, 0, 1.0);
+    spotLight->setSpecularColour(0, 0, 1.0);
+    spotLight->setDirection(-1, -1, 0);
+    spotLight->setPosition(Ogre::Vector3(300, 300, 0));
+    spotLight->setSpotlightRange(Ogre::Degree(35), Ogre::Degree(50));
 }
 
 //-------------------------------------------------------------------------------------
