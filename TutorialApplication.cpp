@@ -33,7 +33,7 @@ void TutorialApplication::createScene(void)
     mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
      
     // Create the entity
-    mEntity = mSceneMgr->createEntity("Robot", "robot.mesh");
+    mEntity = mSceneMgr->createEntity("Leroy", "robot.mesh");
 
     // Create the scene node
     mNode = mSceneMgr->getRootSceneNode()->
