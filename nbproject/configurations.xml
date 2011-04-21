@@ -39,11 +39,11 @@
       <compileType>
         <ccTool>
           <incDir>
-            <pElem>C:/OgreSDK/include</pElem>
-            <pElem>C:/OgreSDK/include/OGRE</pElem>
-            <pElem>C:/OgreSDK/include/OIS</pElem>
-            <pElem>C:/OgreSDK/Samples/Common/include</pElem>
-            <pElem>C:/OgreSDK/boost_1_44</pElem>
+            <pElem>D:/OgreSDK/include</pElem>
+            <pElem>D:/OgreSDK/include/OGRE</pElem>
+            <pElem>D:/OgreSDK/include/OIS</pElem>
+            <pElem>D:/OgreSDK/Samples/Common/include</pElem>
+            <pElem>D:/OgreSDK/boost_1_44</pElem>
           </incDir>
           <preprocessorList>
             <Elem>WIN32</Elem>
@@ -52,10 +52,10 @@
           </preprocessorList>
         </ccTool>
         <linkerTool>
-          <output>C:/OgreSDK/bin/Debug/ogretutorial</output>
+          <output>d:/OgreSDK/bin/Debug/ogretutorial</output>
           <linkerAddLib>
-            <pElem>C:/OgreSDK/lib/debug</pElem>
-            <pElem>C:/OgreSDK/boost_1_44/lib</pElem>
+            <pElem>D:/OgreSDK/lib/debug</pElem>
+            <pElem>D:/OgreSDK/boost_1_44/lib</pElem>
           </linkerAddLib>
           <linkerLibItems>
             <linkerLibLibItem>OgreMain_d.dll</linkerLibLibItem>

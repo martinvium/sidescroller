@@ -21,7 +21,7 @@ FC=gfortran
 AS=as.exe
 
 # Macros
-CND_PLATFORM=MinGW-Windows
+CND_PLATFORM=MinGW_1-Windows
 CND_CONF=Debug
 CND_DISTDIR=dist
 CND_BUILDDIR=build
@@ -52,25 +52,25 @@ FFLAGS=
 ASFLAGS=
 
 # Link Libraries and Options
-LDLIBSOPTIONS=-L/C/OgreSDK/lib/debug -L/C/OgreSDK/boost_1_44/lib -lOgreMain_d.dll -lOIS_d.dll
+LDLIBSOPTIONS=-L/D/OgreSDK/lib/debug -L/D/OgreSDK/boost_1_44/lib -lOgreMain_d.dll -lOIS_d.dll
 
 # Build Targets
 .build-conf: ${BUILD_SUBPROJECTS}
-	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk /C/OgreSDK/bin/Debug/ogretutorial.exe
+	"${MAKE}"  -f nbproject/Makefile-${CND_CONF}.mk /d/OgreSDK/bin/Debug/ogretutorial.exe
 
-/C/OgreSDK/bin/Debug/ogretutorial.exe: ${OBJECTFILES}
-	${MKDIR} -p /C/OgreSDK/bin/Debug
-	${LINK.cc} -o C:/OgreSDK/bin/Debug/ogretutorial ${OBJECTFILES} ${LDLIBSOPTIONS} 
+/d/OgreSDK/bin/Debug/ogretutorial.exe: ${OBJECTFILES}
+	${MKDIR} -p /d/OgreSDK/bin/Debug
+	${LINK.cc} -o d:/OgreSDK/bin/Debug/ogretutorial ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
 ${OBJECTDIR}/TutorialApplication.o: TutorialApplication.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -DWIN32 -D_WINDOWS -D_DEBUG -I/C/OgreSDK/include -I/C/OgreSDK/include/OGRE -I/C/OgreSDK/include/OIS -I/C/OgreSDK/Samples/Common/include -I/C/OgreSDK/boost_1_44 -MMD -MP -MF $@.d -o ${OBJECTDIR}/TutorialApplication.o TutorialApplication.cpp
+	$(COMPILE.cc) -g -DWIN32 -D_WINDOWS -D_DEBUG -I/D/OgreSDK/include -I/D/OgreSDK/include/OGRE -I/D/OgreSDK/include/OIS -I/D/OgreSDK/Samples/Common/include -I/D/OgreSDK/boost_1_44 -MMD -MP -MF $@.d -o ${OBJECTDIR}/TutorialApplication.o TutorialApplication.cpp
 
 ${OBJECTDIR}/BaseApplication.o: BaseApplication.cpp 
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -g -DWIN32 -D_WINDOWS -D_DEBUG -I/C/OgreSDK/include -I/C/OgreSDK/include/OGRE -I/C/OgreSDK/include/OIS -I/C/OgreSDK/Samples/Common/include -I/C/OgreSDK/boost_1_44 -MMD -MP -MF $@.d -o ${OBJECTDIR}/BaseApplication.o BaseApplication.cpp
+	$(COMPILE.cc) -g -DWIN32 -D_WINDOWS -D_DEBUG -I/D/OgreSDK/include -I/D/OgreSDK/include/OGRE -I/D/OgreSDK/include/OIS -I/D/OgreSDK/Samples/Common/include -I/D/OgreSDK/boost_1_44 -MMD -MP -MF $@.d -o ${OBJECTDIR}/BaseApplication.o BaseApplication.cpp
 
 # Subprojects
 .build-subprojects:
@@ -78,7 +78,7 @@ ${OBJECTDIR}/BaseApplication.o: BaseApplication.cpp
 # Clean Targets
 .clean-conf: ${CLEAN_SUBPROJECTS}
 	${RM} -r ${CND_BUILDDIR}/${CND_CONF}
-	${RM} /C/OgreSDK/bin/Debug/ogretutorial.exe
+	${RM} /d/OgreSDK/bin/Debug/ogretutorial.exe
 
 # Subprojects
 .clean-subprojects:

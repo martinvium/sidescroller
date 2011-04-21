@@ -7,21 +7,21 @@ CND_BASEDIR=`pwd`
 CND_BUILDDIR=build
 CND_DISTDIR=dist
 # Debug configuration
-CND_PLATFORM_Debug=MinGW-Windows
-CND_ARTIFACT_DIR_Debug=C:/OgreSDK/bin/Debug
+CND_PLATFORM_Debug=MinGW_1-Windows
+CND_ARTIFACT_DIR_Debug=d:/OgreSDK/bin/Debug
 CND_ARTIFACT_NAME_Debug=ogretutorial
-CND_ARTIFACT_PATH_Debug=C:/OgreSDK/bin/Debug/ogretutorial
-CND_PACKAGE_DIR_Debug=dist/Debug/MinGW-Windows/package
-CND_PACKAGE_NAME_Debug=ogretutorial.tar
-CND_PACKAGE_PATH_Debug=dist/Debug/MinGW-Windows/package/ogretutorial.tar
+CND_ARTIFACT_PATH_Debug=d:/OgreSDK/bin/Debug/ogretutorial
+CND_PACKAGE_DIR_Debug=dist/Debug/MinGW_1-Windows/package
+CND_PACKAGE_NAME_Debug=sidescroller.tar
+CND_PACKAGE_PATH_Debug=dist/Debug/MinGW_1-Windows/package/sidescroller.tar
 # Release configuration
-CND_PLATFORM_Release=MinGW-Windows
-CND_ARTIFACT_DIR_Release=dist/Release/MinGW-Windows
-CND_ARTIFACT_NAME_Release=ogretutorial
-CND_ARTIFACT_PATH_Release=dist/Release/MinGW-Windows/ogretutorial
-CND_PACKAGE_DIR_Release=dist/Release/MinGW-Windows/package
-CND_PACKAGE_NAME_Release=ogretutorial.tar
-CND_PACKAGE_PATH_Release=dist/Release/MinGW-Windows/package/ogretutorial.tar
+CND_PLATFORM_Release=MinGW_1-Windows
+CND_ARTIFACT_DIR_Release=dist/Release/MinGW_1-Windows
+CND_ARTIFACT_NAME_Release=sidescroller
+CND_ARTIFACT_PATH_Release=dist/Release/MinGW_1-Windows/sidescroller
+CND_PACKAGE_DIR_Release=dist/Release/MinGW_1-Windows/package
+CND_PACKAGE_NAME_Release=sidescroller.tar
+CND_PACKAGE_PATH_Release=dist/Release/MinGW_1-Windows/package/sidescroller.tar
 #
 # include compiler specific variables
 #
