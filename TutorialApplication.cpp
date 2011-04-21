@@ -29,33 +29,59 @@ TutorialApplication::~TutorialApplication(void)
 //-------------------------------------------------------------------------------------
 void TutorialApplication::createScene(void)
 {
-    mSceneMgr->setAmbientLight(Ogre::ColourValue(0.25, 0.25, 0.25));
+    // Set the default lighting.
+    mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
+     
+    // Create the entity
+    mEntity = mSceneMgr->createEntity("Robot", "robot.mesh");
 
-    // add the ninja
-    Ogre::Entity *ent = mSceneMgr->createEntity("Ninja", "ninja.mesh");
-    Ogre::SceneNode *node = mSceneMgr->getRootSceneNode()->createChildSceneNode("NinjaNode");
+    // Create the scene node
+    mNode = mSceneMgr->getRootSceneNode()->
+        createChildSceneNode("RobotNode", Ogre::Vector3(0.0f, 0.0f, 25.0f));
+    mNode->attachObject(mEntity);
+    
+    // Create the walking list
+    mWalkList.push_back(Ogre::Vector3(550.0f,  0.0f,  50.0f ));
+    mWalkList.push_back(Ogre::Vector3(550.0f, 0.0f,  -200.0f ));
+    mWalkList.push_back(Ogre::Vector3(-100.0f,  0.0f, -200.0f));
+    
+    // Create objects so we can see movement
+    Ogre::Entity *ent;
+    Ogre::SceneNode *node;
+
+    ent = mSceneMgr->createEntity("Knot1", "knot.mesh");
+    node = mSceneMgr->getRootSceneNode()->createChildSceneNode("Knot1Node",
+        Ogre::Vector3(0.0f, -10.0f,  25.0f));
     node->attachObject(ent);
+    node->setScale(0.1f, 0.1f, 0.1f);
 
-    // create the light
-    Ogre::Light *light = mSceneMgr->createLight("Light1");
-    light->setType(Ogre::Light::LT_POINT);
-    light->setPosition(Ogre::Vector3(250, 150, 250));
-    light->setDiffuseColour(Ogre::ColourValue::White);
-    light->setSpecularColour(Ogre::ColourValue::White);
+    ent = mSceneMgr->createEntity("Knot2", "knot.mesh");
+    node = mSceneMgr->getRootSceneNode()->createChildSceneNode("Knot2Node",
+        Ogre::Vector3(550.0f, -10.0f,  50.0f));
+    node->attachObject(ent);
+    node->setScale(0.1f, 0.1f, 0.1f);
+    
+    ent = mSceneMgr->createEntity("Knot3", "knot.mesh");
+    node = mSceneMgr->getRootSceneNode()->createChildSceneNode("Knot3Node",
+        Ogre::Vector3(550.0f, -10.0f,  -200.0f));
+    node->attachObject(ent);
+    node->setScale(0.1f, 0.1f, 0.1f);
 
-   // Create the scene node
-    node = mSceneMgr->getRootSceneNode()->createChildSceneNode("CamNode1", Ogre::Vector3(-400, 200, 400));
-
-    // Make it look towards the ninja
-    node->yaw(Ogre::Degree(-45));
-
-    // Create the pitch node
-    node = node->createChildSceneNode("PitchNode1");
-    node->attachObject(mCamera);
-
-    // create the second camera node/pitch node
-    node = mSceneMgr->getRootSceneNode()->createChildSceneNode("CamNode2", Ogre::Vector3(0, 200, 400));
-    node = node->createChildSceneNode("PitchNode2");
+    ent = mSceneMgr->createEntity("Knot4", "knot.mesh");
+    node = mSceneMgr->getRootSceneNode()->createChildSceneNode("Knot4Node",
+        Ogre::Vector3(-100.0f, -10.0f,-200.0f));
+    node->attachObject(ent);
+    node->setScale(0.1f, 0.1f, 0.1f);
+    
+    // Set the camera to look at our handiwork
+    mCamera->setPosition(90.0f, 280.0f, 535.0f);
+    mCamera->pitch(Ogre::Degree(-30.0f));
+    mCamera->yaw(Ogre::Degree(-15.0f));
+    
+    // Set idle animation
+    mAnimationState = mEntity->getAnimationState("Idle");
+    mAnimationState->setLoop(true);
+    mAnimationState->setEnabled(true);
 }
 
 //-------------------------------------------------------------------------------------
@@ -63,151 +89,68 @@ void TutorialApplication::createFrameListener(void)
 {
     BaseApplication::createFrameListener();
     
-    // Populate the camera container
-    mCamNode = mCamera->getParentSceneNode();
-
-    // set the rotation and move speed
-    mRotate = 0.13;
-    mMove = 250;
-    
-    mDirection = Ogre::Vector3::ZERO;
+    // Set default values for variables
+     mWalkSpeed = 35.0f;
+     mDirection = Ogre::Vector3::ZERO;
 }
 
 //-------------------------------------------------------------------------------------
-bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent& evt)
+bool TutorialApplication::nextLocation(void)
 {
-    if (mWindow->isClosed()) return false;
-    if (mShutDown) return false;
-    mKeyboard->capture();
-    mMouse->capture();
-    mTrayMgr->frameRenderingQueued(evt);
+    if (mWalkList.empty())
+         return false;
     
-    mCamNode->translate(mDirection * evt.timeSinceLastFrame, Ogre::Node::TS_LOCAL);
+    mDestination = mWalkList.front();  // this gets the front of the deque
+    mWalkList.pop_front();             // this removes the front of the deque
+
+    mDirection = mDestination - mNode->getPosition();
+    mDistance = mDirection.normalise();
     
     return true;
 }
 
 //-------------------------------------------------------------------------------------
-bool TutorialApplication::keyPressed( const OIS::KeyEvent& evt )
+bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt)
 {
-    switch (evt.key) {
-        case OIS::KC_ESCAPE: 
-            mShutDown = true;
-            break;
-            
-        case OIS::KC_1:
-            mCamera->getParentSceneNode()->detachObject(mCamera);
-            mCamNode = mSceneMgr->getSceneNode("CamNode1");
-            mCamNode->attachObject(mCamera);
-            break;
+    if (mDirection == Ogre::Vector3::ZERO) {
+        if (nextLocation()) {
+            // Set walking animation
+            mAnimationState = mEntity->getAnimationState("Walk");
+            mAnimationState->setLoop(true);
+            mAnimationState->setEnabled(true);
+        }
+    } else {
+        Ogre::Real move = mWalkSpeed * evt.timeSinceLastFrame;
+        mDistance -= move;
+    
+        if (mDistance <= 0.0f) {
+            mNode->setPosition(mDestination);
+            mDirection = Ogre::Vector3::ZERO;
 
-        case OIS::KC_2:
-            mCamera->getParentSceneNode()->detachObject(mCamera);
-            mCamNode = mSceneMgr->getSceneNode("CamNode2");
-            mCamNode->attachObject(mCamera);
-            break;
-            
-        case OIS::KC_UP:
-        case OIS::KC_W:
-            mDirection.z = -mMove;
-            break;
-
-        case OIS::KC_DOWN:
-        case OIS::KC_S:
-            mDirection.z = mMove;
-            break;
-
-        case OIS::KC_LEFT:
-        case OIS::KC_A:
-            mDirection.x = -mMove;
-            break;
-
-        case OIS::KC_RIGHT:
-        case OIS::KC_D:
-            mDirection.x = mMove;
-            break;
-
-        case OIS::KC_PGDOWN:
-        case OIS::KC_E:
-            mDirection.y = -mMove;
-            break;
-
-        case OIS::KC_PGUP:
-        case OIS::KC_Q:
-            mDirection.y = mMove;
-            break;
-        default:
-            break;
+            // Set animation based on if the robot has another point to walk to. 
+            if (! nextLocation()) {
+                // Set Idle animation                     
+                mAnimationState = mEntity->getAnimationState("Idle");
+                mAnimationState->setLoop(true);
+                mAnimationState->setEnabled(true);
+            } else {
+                Ogre::Vector3 src = mNode->getOrientation() * Ogre::Vector3::UNIT_X;
+                if ((1.0f + src.dotProduct(mDirection)) < 0.0001f) {
+                    mNode->yaw(Ogre::Degree(180));
+                } else {
+                    Ogre::Quaternion quat = src.getRotationTo(mDirection);
+                    mNode->rotate(quat);
+                }
+            }
+        } else {
+            mNode->translate(mDirection * move);
+        }
     }
     
-    return true;
+    mAnimationState->addTime(evt.timeSinceLastFrame);
+    
+    return BaseApplication::frameRenderingQueued(evt);
 }
-
-bool TutorialApplication::keyReleased( const OIS::KeyEvent& evt )
-{
-    switch (evt.key) {
-        case OIS::KC_UP:
-        case OIS::KC_W:
-            mDirection.z = 0;
-            break;
-
-        case OIS::KC_DOWN:
-        case OIS::KC_S:
-            mDirection.z = 0;
-            break;
-
-        case OIS::KC_LEFT:
-        case OIS::KC_A:
-            mDirection.x = 0;
-            break;
-
-        case OIS::KC_RIGHT:
-        case OIS::KC_D:
-            mDirection.x = 0;
-            break;
-
-        case OIS::KC_PGDOWN:
-        case OIS::KC_E:
-            mDirection.y = 0;
-            break;
-
-        case OIS::KC_PGUP:
-        case OIS::KC_Q:
-            mDirection.y = 0;
-            break;
-
-        default:
-            break;
-    }
-    return true;
-}
-// OIS::MouseListener
-bool TutorialApplication::mouseMoved( const OIS::MouseEvent& evt )
-{
-    if (evt.state.buttonDown(OIS::MB_Right))
-    {
-        mCamNode->yaw(Ogre::Degree(-mRotate * evt.state.X.rel), Ogre::Node::TS_WORLD);
-        mCamNode->pitch(Ogre::Degree(-mRotate * evt.state.Y.rel), Ogre::Node::TS_LOCAL);
-    }
-    return true;
-}
-
-//-------------------------------------------------------------------------------------
-bool TutorialApplication::mousePressed( const OIS::MouseEvent& evt, OIS::MouseButtonID id )
-{
-    Ogre::Light *light = mSceneMgr->getLight("Light1");
-    switch (id)
-    {
-        case OIS::MB_Left:
-            light->setVisible(! light->isVisible());
-            break;
-        default:
-            break;
-    }
-    return true;
-}
-
-bool TutorialApplication::mouseReleased( const OIS::MouseEvent& evt, OIS::MouseButtonID id ){return true;}
 
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
