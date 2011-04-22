@@ -41,9 +41,9 @@ void TutorialApplication::createScene(void)
     createPlayer();
     
     // Create the walking list
-    mWalkList.push_back(Ogre::Vector3(550.0f,  0.0f,  50.0f ));
-    mWalkList.push_back(Ogre::Vector3(550.0f, 0.0f,  -200.0f ));
-    mWalkList.push_back(Ogre::Vector3(-100.0f,  0.0f, -200.0f));
+    mWalkList.push_back(Ogre::Vector3(200.0f,  20.0f,  50.0f ));
+    mWalkList.push_back(Ogre::Vector3(0.0f, 20.0f,  50.0f ));
+    mWalkList.push_back(Ogre::Vector3(200.0f,  20.0f, 50.0f));
     
     // Set the camera to look at our handiwork
     mCamera->setPosition(90.0f, CAMERA_Y, CAMERA_Z);
@@ -71,7 +71,7 @@ void TutorialApplication::createPlayer(void)
     mEntity = mSceneMgr->createEntity("Leroy", "robot.mesh");
 
     // Create the scene node
-    mNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("RobotNode", Ogre::Vector3(0.0f, 0.0f, 25.0f));
+    mNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("RobotNode", Ogre::Vector3(0.0f, 20.0f, 25.0f));
     mNode->attachObject(mEntity);
     
     mCameraMan->setTarget(mNode);
