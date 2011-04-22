@@ -36,14 +36,7 @@ void TutorialApplication::createScene(void)
     mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
     
     createBox();
-    
-    // Create the entity
-    mEntity = mSceneMgr->createEntity("Leroy", "robot.mesh");
-
-    // Create the scene node
-    mNode = mSceneMgr->getRootSceneNode()->
-        createChildSceneNode("RobotNode", Ogre::Vector3(0.0f, 0.0f, 25.0f));
-    mNode->attachObject(mEntity);
+    createPlayer();
     
     // Create the walking list
     mWalkList.push_back(Ogre::Vector3(550.0f,  0.0f,  50.0f ));
@@ -87,6 +80,18 @@ void TutorialApplication::createScene(void)
     mAnimationState = mEntity->getAnimationState("Idle");
     mAnimationState->setLoop(true);
     mAnimationState->setEnabled(true);
+}
+
+//-------------------------------------------------------------------------------------
+void TutorialApplication::createPlayer(void)
+{
+    // Create the entity
+    mEntity = mSceneMgr->createEntity("Leroy", "robot.mesh");
+
+    // Create the scene node
+    mNode = mSceneMgr->getRootSceneNode()->
+        createChildSceneNode("RobotNode", Ogre::Vector3(0.0f, 0.0f, 25.0f));
+    mNode->attachObject(mEntity);
 }
 
 //-------------------------------------------------------------------------------------

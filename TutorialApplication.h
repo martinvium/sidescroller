@@ -29,6 +29,7 @@ public:
 protected:
     virtual void createScene(void);
     virtual void createBox(void);
+    virtual void createPlayer(void);
     virtual void createFrameListener(void);
     virtual bool nextLocation(void);
     virtual bool frameRenderingQueued(const Ogre::FrameEvent &evt);
