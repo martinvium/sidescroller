@@ -15,6 +15,9 @@ This source file is part of the
 -----------------------------------------------------------------------------
 */
 #include "TutorialApplication.h"
+#include <OgreManualObject.h>
+#include <OgreRenderOperation.h>
+#include <OgreResourceGroupManager.h>
 
 //-------------------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
@@ -31,7 +34,9 @@ void TutorialApplication::createScene(void)
 {
     // Set the default lighting.
     mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
-     
+    
+    createBox();
+    
     // Create the entity
     mEntity = mSceneMgr->createEntity("Leroy", "robot.mesh");
 
@@ -82,6 +87,22 @@ void TutorialApplication::createScene(void)
     mAnimationState = mEntity->getAnimationState("Idle");
     mAnimationState->setLoop(true);
     mAnimationState->setEnabled(true);
+}
+
+//-------------------------------------------------------------------------------------
+void TutorialApplication::createBox(void)
+{
+    // Create the entity
+    mEntityCube = mSceneMgr->createEntity("Cube", "cube.mesh");
+    //Ogre::MaterialPtr m_materialOutline = Ogre::MaterialManager::getSingleton().create("Dirt", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
+    mEntityCube->setMaterialName("Examples/Rockwall");
+    mEntityCube->setCastShadows(false);
+
+    // Create the scene node
+    mNodeCube = mSceneMgr->getRootSceneNode()->createChildSceneNode("CubeNode", Ogre::Vector3(0.0f, 0.0f, 125.0f));
+    mNodeCube->attachObject(mEntityCube);
+    
+    mNodeCube->setScale(5.0f, 0.5f, 1.0f);
 }
 
 //-------------------------------------------------------------------------------------
