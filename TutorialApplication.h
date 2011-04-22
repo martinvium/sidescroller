@@ -31,10 +31,12 @@ protected:
     virtual void createBox(const Ogre::String &name, const Ogre::Vector3 &pos);
     virtual void createPlayer(void);
     virtual void createTerrain(void);
+    virtual void movePlayer(const Ogre::FrameEvent &evt);
     
     virtual void createFrameListener(void);
     virtual bool nextLocation(void);
     virtual bool frameRenderingQueued(const Ogre::FrameEvent &evt);
+    virtual bool keyPressed( const OIS::KeyEvent &arg );
 
     Ogre::Real mDistance;                  // The distance the object has left to travel
     Ogre::Vector3 mDirection;              // The direction the object is moving
@@ -47,8 +49,12 @@ protected:
     std::deque<Ogre::Vector3> mWalkList;   // The list of points we are walking to
     std::vector<Ogre::Entity> mBoxEntities;
     std::vector<Ogre::SceneNode> mBoxNodes;
+    bool mCameraLocked;
 
     Ogre::Real mWalkSpeed;                 // The speed at which the object is moving
+    
+    static const float CAMERA_Y = 200.0f;
+    static const float CAMERA_Z = 535.0f;
 };
 
 #endif // #ifndef __TutorialApplication_h_

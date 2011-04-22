@@ -23,6 +23,7 @@ This source file is part of the
 //-------------------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
 {
+    mCameraLocked = true;
 }
 
 //-------------------------------------------------------------------------------------
@@ -44,36 +45,8 @@ void TutorialApplication::createScene(void)
     mWalkList.push_back(Ogre::Vector3(550.0f, 0.0f,  -200.0f ));
     mWalkList.push_back(Ogre::Vector3(-100.0f,  0.0f, -200.0f));
     
-    // Create objects so we can see movement
-    Ogre::Entity *ent;
-    Ogre::SceneNode *node;
-
-    ent = mSceneMgr->createEntity("Knot1", "knot.mesh");
-    node = mSceneMgr->getRootSceneNode()->createChildSceneNode("Knot1Node",
-        Ogre::Vector3(0.0f, -10.0f,  25.0f));
-    node->attachObject(ent);
-    node->setScale(0.1f, 0.1f, 0.1f);
-
-    ent = mSceneMgr->createEntity("Knot2", "knot.mesh");
-    node = mSceneMgr->getRootSceneNode()->createChildSceneNode("Knot2Node",
-        Ogre::Vector3(550.0f, -10.0f,  50.0f));
-    node->attachObject(ent);
-    node->setScale(0.1f, 0.1f, 0.1f);
-    
-    ent = mSceneMgr->createEntity("Knot3", "knot.mesh");
-    node = mSceneMgr->getRootSceneNode()->createChildSceneNode("Knot3Node",
-        Ogre::Vector3(550.0f, -10.0f,  -200.0f));
-    node->attachObject(ent);
-    node->setScale(0.1f, 0.1f, 0.1f);
-
-    ent = mSceneMgr->createEntity("Knot4", "knot.mesh");
-    node = mSceneMgr->getRootSceneNode()->createChildSceneNode("Knot4Node",
-        Ogre::Vector3(-100.0f, -10.0f,-200.0f));
-    node->attachObject(ent);
-    node->setScale(0.1f, 0.1f, 0.1f);
-    
     // Set the camera to look at our handiwork
-    mCamera->setPosition(90.0f, 280.0f, 535.0f);
+    mCamera->setPosition(90.0f, CAMERA_Y, CAMERA_Z);
     mCamera->pitch(Ogre::Degree(-30.0f));
     mCamera->yaw(Ogre::Degree(-15.0f));
     
@@ -98,9 +71,10 @@ void TutorialApplication::createPlayer(void)
     mEntity = mSceneMgr->createEntity("Leroy", "robot.mesh");
 
     // Create the scene node
-    mNode = mSceneMgr->getRootSceneNode()->
-        createChildSceneNode("RobotNode", Ogre::Vector3(0.0f, 0.0f, 25.0f));
+    mNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("RobotNode", Ogre::Vector3(0.0f, 0.0f, 25.0f));
     mNode->attachObject(mEntity);
+    
+    mCameraMan->setTarget(mNode);
 }
 
 //-------------------------------------------------------------------------------------
@@ -147,6 +121,14 @@ bool TutorialApplication::nextLocation(void)
 //-------------------------------------------------------------------------------------
 bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt)
 {
+    movePlayer(evt);
+    
+    return BaseApplication::frameRenderingQueued(evt);
+}
+
+//-------------------------------------------------------------------------------------
+void TutorialApplication::movePlayer(const Ogre::FrameEvent &evt)
+{
     if (mDirection == Ogre::Vector3::ZERO) {
         if (nextLocation()) {
             // Set walking animation
@@ -179,12 +161,18 @@ bool TutorialApplication::frameRenderingQueued(const Ogre::FrameEvent &evt)
             }
         } else {
             mNode->translate(mDirection * move);
+            Ogre::Vector3 pos = mNode->getPosition();
+            mCamera->setPosition(pos.x, CAMERA_Y, CAMERA_Z);
         }
     }
     
     mAnimationState->addTime(evt.timeSinceLastFrame);
-    
-    return BaseApplication::frameRenderingQueued(evt);
+}
+
+bool TutorialApplication::keyPressed( const OIS::KeyEvent &arg )
+{
+    bool ret = BaseApplication::keyPressed(arg);
+    return ret;
 }
 
 
