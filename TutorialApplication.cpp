@@ -35,7 +35,8 @@ TutorialApplication::~TutorialApplication(void)
 void TutorialApplication::createScene(void)
 {
     // Set the default lighting.
-    mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
+    mSceneMgr->setAmbientLight(Ogre::ColourValue(0.5f, 0.5f, 0.5f));
+    mSceneMgr->setShadowTechnique(Ogre::SHADOWTYPE_STENCIL_ADDITIVE);
     
     createTerrain();
     createPlayer();
@@ -59,9 +60,75 @@ void TutorialApplication::createScene(void)
 //-------------------------------------------------------------------------------------
 void TutorialApplication::createTerrain(void)
 {
+    createBackground();
+    createLava();
     createBox("Cube1", Ogre::Vector3(100.0f, 0.0f, 25.0f));
     createBox("Cube2", Ogre::Vector3(300.0f, -100.0f, 25.0f));
     createBox("Cube3", Ogre::Vector3(500.0f, 50.0f, 25.0f));
+}
+
+//-------------------------------------------------------------------------------------
+void TutorialApplication::createBackground(void)
+{
+    // wall
+    Ogre::Plane wallPlane(Ogre::Vector3::UNIT_Z, 0);
+    Ogre::MeshManager::getSingleton().createPlane("wall", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+        wallPlane, 1500, 1500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Y);
+    
+    Ogre::Entity* entWall = mSceneMgr->createEntity("WallEntity", "wall");
+    Ogre::SceneNode *nodeWall = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+    nodeWall->attachObject(entWall);
+    nodeWall->setPosition(Ogre::Vector3(0.0f, 0.0f, -25.0f));
+    
+    entWall->setMaterialName("Examples/Rockwall");
+    entWall->setCastShadows(false);
+}
+
+//-------------------------------------------------------------------------------------
+void TutorialApplication::createLava(void)
+{
+    Ogre::Plane lavaPlane(Ogre::Vector3::UNIT_Y, 0);
+    Ogre::MeshManager::getSingleton().createPlane("lava", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+        lavaPlane, 1500, 1500, 20, 20, true, 1, 5, 5, Ogre::Vector3::UNIT_Z);
+    
+    Ogre::Entity* entLava = mSceneMgr->createEntity("LavaEntity", "lava");
+    Ogre::SceneNode *nodeLava = mSceneMgr->getRootSceneNode()->createChildSceneNode();
+    nodeLava->attachObject(entLava);
+    nodeLava->setPosition(Ogre::Vector3(0.0f, -150.0f, 0.0f));
+    
+    entLava->setMaterialName("Examples/Lava");
+    entLava->setCastShadows(false);
+    
+    // light
+    /*Ogre::Light* directionalLight = mSceneMgr->createLight("directionalLight");
+    directionalLight->setType(Ogre::Light::LT_DIRECTIONAL);
+    directionalLight->setDiffuseColour(Ogre::ColourValue(.5, 0, 0));
+    directionalLight->setSpecularColour(Ogre::ColourValue(.5, 0, 0));
+    directionalLight->setDirection(Ogre::Vector3( 0, 1, -1 ));*/
+    
+    createLavaLight();
+}
+
+//-------------------------------------------------------------------------------------
+void TutorialApplication::createLavaLight(void)
+{
+    Ogre::Light* pointLight = mSceneMgr->createLight("pointLight1");
+    pointLight->setType(Ogre::Light::LT_POINT);
+    pointLight->setPosition(Ogre::Vector3(-50, -100, 50));
+    pointLight->setDiffuseColour(Ogre::ColourValue(1, 0, 0));
+    pointLight->setSpecularColour(Ogre::ColourValue(.25, 0, 0));
+    
+    Ogre::Light* pointLight2 = mSceneMgr->createLight("pointLight2");
+    pointLight2->setType(Ogre::Light::LT_POINT);
+    pointLight2->setPosition(Ogre::Vector3(200, -100, 50));
+    pointLight2->setDiffuseColour(Ogre::ColourValue(1, 0, 0));
+    pointLight2->setSpecularColour(Ogre::ColourValue(.25, 0, 0));
+    
+    Ogre::Light* pointLight3 = mSceneMgr->createLight("pointLight3");
+    pointLight3->setType(Ogre::Light::LT_POINT);
+    pointLight3->setPosition(Ogre::Vector3(400, -100, 50));
+    pointLight3->setDiffuseColour(Ogre::ColourValue(1, 0, 0));
+    pointLight3->setSpecularColour(Ogre::ColourValue(.25, 0, 0));
 }
 
 //-------------------------------------------------------------------------------------
@@ -69,9 +136,10 @@ void TutorialApplication::createPlayer(void)
 {
     // Create the entity
     mEntity = mSceneMgr->createEntity("Leroy", "robot.mesh");
+    mEntity->setCastShadows(false);
 
     // Create the scene node
-    mNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("RobotNode", Ogre::Vector3(0.0f, 20.0f, 25.0f));
+    mNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("RobotNode", Ogre::Vector3(0.0f, 20.0f, 50.0f));
     mNode->attachObject(mEntity);
     
     mCameraMan->setTarget(mNode);
@@ -83,7 +151,7 @@ void TutorialApplication::createBox(const Ogre::String &name, const Ogre::Vector
     // Create the entity
     Ogre::Entity *entityCube = mSceneMgr->createEntity("Entity" + name, "cube.mesh");
     entityCube->setMaterialName("Examples/Rockwall");
-    entityCube->setCastShadows(false);
+    entityCube->setCastShadows(true);
     //mBoxEntities->push_back(*entityCube);
 
     // Create the scene node
@@ -161,8 +229,8 @@ void TutorialApplication::movePlayer(const Ogre::FrameEvent &evt)
             }
         } else {
             mNode->translate(mDirection * move);
-            Ogre::Vector3 pos = mNode->getPosition();
-            mCamera->setPosition(pos.x, CAMERA_Y, CAMERA_Z);
+            //Ogre::Vector3 pos = mNode->getPosition();
+            //mCamera->setPosition(pos.x, CAMERA_Y, CAMERA_Z);
         }
     }
     
