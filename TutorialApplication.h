@@ -28,8 +28,10 @@ public:
 
 protected:
     virtual void createScene(void);
-    virtual void createBox(void);
+    virtual void createBox(const Ogre::String &name, const Ogre::Vector3 &pos);
     virtual void createPlayer(void);
+    virtual void createTerrain(void);
+    
     virtual void createFrameListener(void);
     virtual bool nextLocation(void);
     virtual bool frameRenderingQueued(const Ogre::FrameEvent &evt);
@@ -42,9 +44,9 @@ protected:
 
     Ogre::Entity *mEntity;                 // The Entity we are animating
     Ogre::SceneNode *mNode;                // The SceneNode that the Entity is attached to
-    Ogre::Entity *mEntityCube;                 // The Entity we are animating
-    Ogre::SceneNode *mNodeCube;                // The SceneNode that the Entity is attached to
     std::deque<Ogre::Vector3> mWalkList;   // The list of points we are walking to
+    std::vector<Ogre::Entity> mBoxEntities;
+    std::vector<Ogre::SceneNode> mBoxNodes;
 
     Ogre::Real mWalkSpeed;                 // The speed at which the object is moving
 };

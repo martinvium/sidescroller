@@ -18,6 +18,7 @@ This source file is part of the
 #include <OgreManualObject.h>
 #include <OgreRenderOperation.h>
 #include <OgreResourceGroupManager.h>
+#include <OgreString.h>
 
 //-------------------------------------------------------------------------------------
 TutorialApplication::TutorialApplication(void)
@@ -35,7 +36,7 @@ void TutorialApplication::createScene(void)
     // Set the default lighting.
     mSceneMgr->setAmbientLight(Ogre::ColourValue(1.0f, 1.0f, 1.0f));
     
-    createBox();
+    createTerrain();
     createPlayer();
     
     // Create the walking list
@@ -83,6 +84,14 @@ void TutorialApplication::createScene(void)
 }
 
 //-------------------------------------------------------------------------------------
+void TutorialApplication::createTerrain(void)
+{
+    createBox("Cube1", Ogre::Vector3(100.0f, 0.0f, 25.0f));
+    createBox("Cube2", Ogre::Vector3(300.0f, -100.0f, 25.0f));
+    createBox("Cube3", Ogre::Vector3(500.0f, 50.0f, 25.0f));
+}
+
+//-------------------------------------------------------------------------------------
 void TutorialApplication::createPlayer(void)
 {
     // Create the entity
@@ -95,19 +104,19 @@ void TutorialApplication::createPlayer(void)
 }
 
 //-------------------------------------------------------------------------------------
-void TutorialApplication::createBox(void)
+void TutorialApplication::createBox(const Ogre::String &name, const Ogre::Vector3 &pos)
 {
     // Create the entity
-    mEntityCube = mSceneMgr->createEntity("Cube", "cube.mesh");
-    //Ogre::MaterialPtr m_materialOutline = Ogre::MaterialManager::getSingleton().create("Dirt", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME);
-    mEntityCube->setMaterialName("Examples/Rockwall");
-    mEntityCube->setCastShadows(false);
+    Ogre::Entity *entityCube = mSceneMgr->createEntity("Entity" + name, "cube.mesh");
+    entityCube->setMaterialName("Examples/Rockwall");
+    entityCube->setCastShadows(false);
+    //mBoxEntities->push_back(*entityCube);
 
     // Create the scene node
-    mNodeCube = mSceneMgr->getRootSceneNode()->createChildSceneNode("CubeNode", Ogre::Vector3(0.0f, 0.0f, 125.0f));
-    mNodeCube->attachObject(mEntityCube);
-    
-    mNodeCube->setScale(5.0f, 0.5f, 1.0f);
+    Ogre::SceneNode *nodeCube = mSceneMgr->getRootSceneNode()->createChildSceneNode("Node" + name, pos);
+    nodeCube->attachObject(entityCube);
+    nodeCube->setScale(2.0f, 0.2f, 1.0f);
+    //mBoxNodes->push_back(*nodeCube);
 }
 
 //-------------------------------------------------------------------------------------
