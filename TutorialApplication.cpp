@@ -42,9 +42,9 @@ void TutorialApplication::createScene(void)
     createPlayer();
     
     // Create the walking list
-    mWalkList.push_back(Ogre::Vector3(200.0f,  20.0f,  50.0f ));
-    mWalkList.push_back(Ogre::Vector3(0.0f, 20.0f,  50.0f ));
-    mWalkList.push_back(Ogre::Vector3(200.0f,  20.0f, 50.0f));
+    mWalkList.push_back(Ogre::Vector3(200.0f,  10.0f,  35.0f ));
+    mWalkList.push_back(Ogre::Vector3(0.0f, 10.0f,  35.0f ));
+    mWalkList.push_back(Ogre::Vector3(200.0f,  10.0f, 35.0f));
     
     // Set the camera to look at our handiwork
     mCamera->setPosition(90.0f, CAMERA_Y, CAMERA_Z);
@@ -52,7 +52,7 @@ void TutorialApplication::createScene(void)
     mCamera->yaw(Ogre::Degree(-15.0f));
     
     // Set idle animation
-    mAnimationState = mEntity->getAnimationState("Idle");
+    mAnimationState = mPlayerEntity->getAnimationState("Idle");
     mAnimationState->setLoop(true);
     mAnimationState->setEnabled(true);
 }
@@ -99,13 +99,6 @@ void TutorialApplication::createLava(void)
     entLava->setMaterialName("Examples/Lava");
     entLava->setCastShadows(false);
     
-    // light
-    /*Ogre::Light* directionalLight = mSceneMgr->createLight("directionalLight");
-    directionalLight->setType(Ogre::Light::LT_DIRECTIONAL);
-    directionalLight->setDiffuseColour(Ogre::ColourValue(.5, 0, 0));
-    directionalLight->setSpecularColour(Ogre::ColourValue(.5, 0, 0));
-    directionalLight->setDirection(Ogre::Vector3( 0, 1, -1 ));*/
-    
     createLavaLight();
 }
 
@@ -135,14 +128,14 @@ void TutorialApplication::createLavaLight(void)
 void TutorialApplication::createPlayer(void)
 {
     // Create the entity
-    mEntity = mSceneMgr->createEntity("Leroy", "robot.mesh");
-    mEntity->setCastShadows(false);
+    mPlayerEntity = mSceneMgr->createEntity("Leroy", "robot.mesh");
+    mPlayerEntity->setCastShadows(false);
 
     // Create the scene node
-    mNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("RobotNode", Ogre::Vector3(0.0f, 20.0f, 50.0f));
-    mNode->attachObject(mEntity);
+    mPlayerNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("RobotNode", Ogre::Vector3(0.0f, 10.0f, 35.0f));
+    mPlayerNode->attachObject(mPlayerEntity);
     
-    mCameraMan->setTarget(mNode);
+    mCameraMan->setTarget(mPlayerNode);
 }
 
 //-------------------------------------------------------------------------------------
@@ -167,7 +160,7 @@ void TutorialApplication::createFrameListener(void)
     BaseApplication::createFrameListener();
     
     // Set default values for variables
-     mWalkSpeed = 35.0f;
+     mWalkSpeed = 25.0f;
      mDirection = Ogre::Vector3::ZERO;
 }
 
@@ -180,7 +173,7 @@ bool TutorialApplication::nextLocation(void)
     mDestination = mWalkList.front();  // this gets the front of the deque
     mWalkList.pop_front();             // this removes the front of the deque
 
-    mDirection = mDestination - mNode->getPosition();
+    mDirection = mDestination - mPlayerNode->getPosition();
     mDistance = mDirection.normalise();
     
     return true;
@@ -200,7 +193,7 @@ void TutorialApplication::movePlayer(const Ogre::FrameEvent &evt)
     if (mDirection == Ogre::Vector3::ZERO) {
         if (nextLocation()) {
             // Set walking animation
-            mAnimationState = mEntity->getAnimationState("Walk");
+            mAnimationState = mPlayerEntity->getAnimationState("Walk");
             mAnimationState->setLoop(true);
             mAnimationState->setEnabled(true);
         }
@@ -209,26 +202,26 @@ void TutorialApplication::movePlayer(const Ogre::FrameEvent &evt)
         mDistance -= move;
     
         if (mDistance <= 0.0f) {
-            mNode->setPosition(mDestination);
+            mPlayerNode->setPosition(mDestination);
             mDirection = Ogre::Vector3::ZERO;
 
             // Set animation based on if the robot has another point to walk to. 
             if (! nextLocation()) {
                 // Set Idle animation                     
-                mAnimationState = mEntity->getAnimationState("Idle");
+                mAnimationState = mPlayerEntity->getAnimationState("Idle");
                 mAnimationState->setLoop(true);
                 mAnimationState->setEnabled(true);
             } else {
-                Ogre::Vector3 src = mNode->getOrientation() * Ogre::Vector3::UNIT_X;
+                Ogre::Vector3 src = mPlayerNode->getOrientation() * Ogre::Vector3::UNIT_X;
                 if ((1.0f + src.dotProduct(mDirection)) < 0.0001f) {
-                    mNode->yaw(Ogre::Degree(180));
+                    mPlayerNode->yaw(Ogre::Degree(180));
                 } else {
                     Ogre::Quaternion quat = src.getRotationTo(mDirection);
-                    mNode->rotate(quat);
+                    mPlayerNode->rotate(quat);
                 }
             }
         } else {
-            mNode->translate(mDirection * move);
+            mPlayerNode->translate(mDirection * move);
             //Ogre::Vector3 pos = mNode->getPosition();
             //mCamera->setPosition(pos.x, CAMERA_Y, CAMERA_Z);
         }

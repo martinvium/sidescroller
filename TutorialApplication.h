@@ -47,8 +47,8 @@ protected:
 
     Ogre::AnimationState *mAnimationState; // The current animation state of the object
 
-    Ogre::Entity *mEntity;                 // The Entity we are animating
-    Ogre::SceneNode *mNode;                // The SceneNode that the Entity is attached to
+    Ogre::Entity *mPlayerEntity;                 // The Entity we are animating
+    Ogre::SceneNode *mPlayerNode;                // The SceneNode that the Entity is attached to
     std::deque<Ogre::Vector3> mWalkList;   // The list of points we are walking to
     std::vector<Ogre::Entity> mBoxEntities;
     std::vector<Ogre::SceneNode> mBoxNodes;
