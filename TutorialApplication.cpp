@@ -96,7 +96,7 @@ void TutorialApplication::createLava(void)
     nodeLava->attachObject(entLava);
     nodeLava->setPosition(Ogre::Vector3(0.0f, -150.0f, 0.0f));
     
-    entLava->setMaterialName("Examples/Lava");
+    entLava->setMaterialName("Environment/Lava");
     entLava->setCastShadows(false);
     
     createLavaLight();
