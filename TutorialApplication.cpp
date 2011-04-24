@@ -228,13 +228,35 @@ void TutorialApplication::movePlayer(const Ogre::FrameEvent &evt)
     }
     
     mAnimationState->addTime(evt.timeSinceLastFrame);
+    
 }
 
-bool TutorialApplication::keyPressed( const OIS::KeyEvent &arg )
+void TutorialApplication::jumpPlayer(void)
+{
+    
+    mDirection = Ogre::Vector3::ZERO;
+    Ogre::Vector3 vector;
+    vector = mWalkList.front();
+    vector.y = vector.y +100 ;
+    mWalkList.insert(mWalkList.begin(), vector);
+    
+}
+
+bool TutorialApplication::keyPressed(const OIS::KeyEvent &arg)
 {
     bool ret = BaseApplication::keyPressed(arg);
+    
+    switch(arg.key)
+    {
+        case OIS::KC_SPACE:
+                jumpPlayer();
+        break;
+    
+                
+    }
     return ret;
 }
+
 
 
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
@@ -249,7 +271,7 @@ extern "C" {
 #if OGRE_PLATFORM == OGRE_PLATFORM_WIN32
     INT WINAPI WinMain( HINSTANCE hInst, HINSTANCE, LPSTR strCmdLine, INT )
 #else
-    int main(int argc, char *argv[])
+    int main(int argc, char * argv[])
 #endif
     {
         // Create application object

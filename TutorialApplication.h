@@ -40,6 +40,8 @@ protected:
     void movePlayer(const Ogre::FrameEvent &evt);
     void createLava(void);
     void createLavaLight(void);
+    void jumpPlayer(void);
+    
     
     Ogre::Real mDistance;                  // The distance the object has left to travel
     Ogre::Vector3 mDirection;              // The direction the object is moving
