@@ -13,3 +13,17 @@ material Environment/Lava
 		}
 	}
 }
+
+material Environment/Rockwall
+{
+	technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture rockwall.tga
+			}
+		}
+	}
+}

@@ -77,7 +77,7 @@ void TutorialApplication::createBackground(void)
     nodeWall->attachObject(entWall);
     nodeWall->setPosition(Ogre::Vector3(0.0f, 0.0f, -25.0f));
     
-    entWall->setMaterialName("Examples/Rockwall");
+    entWall->setMaterialName("Environment/Rockwall");
     entWall->setCastShadows(false);
 }
 
@@ -125,11 +125,11 @@ void TutorialApplication::createLavaLight(void)
 void TutorialApplication::createPlayer(void)
 {
     // Create the entity
-    mPlayerEntity = mSceneMgr->createEntity("Leroy", "robot.mesh");
+    mPlayerEntity = mSceneMgr->createEntity("PlayerEntity", "player.mesh");
     mPlayerEntity->setCastShadows(false);
 
     // Create the scene node
-    mPlayerNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("RobotNode", Ogre::Vector3(0.0f, 10.0f, 35.0f));
+    mPlayerNode = mSceneMgr->getRootSceneNode()->createChildSceneNode("PlayerNode", Ogre::Vector3(0.0f, 10.0f, 35.0f));
     mPlayerNode->attachObject(mPlayerEntity);
     
     mCameraMan->setTarget(mPlayerNode);
@@ -139,16 +139,14 @@ void TutorialApplication::createPlayer(void)
 void TutorialApplication::createBox(const Ogre::String &name, const Ogre::Vector3 &pos)
 {
     // Create the entity
-    Ogre::Entity *entityCube = mSceneMgr->createEntity("Entity" + name, "cube.mesh");
-    entityCube->setMaterialName("Examples/Rockwall");
+    Ogre::Entity *entityCube = mSceneMgr->createEntity("Entity" + name, "box.mesh");
+    entityCube->setMaterialName("Environment/Rockwall");
     entityCube->setCastShadows(true);
-    //mBoxEntities->push_back(*entityCube);
 
     // Create the scene node
     Ogre::SceneNode *nodeCube = mSceneMgr->getRootSceneNode()->createChildSceneNode("Node" + name, pos);
     nodeCube->attachObject(entityCube);
     nodeCube->setScale(2.0f, 0.2f, 1.0f);
-    //mBoxNodes->push_back(*nodeCube);
 }
 
 //-------------------------------------------------------------------------------------

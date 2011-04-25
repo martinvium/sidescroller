@@ -52,8 +52,6 @@ protected:
     Ogre::Entity *mPlayerEntity;                 // The Entity we are animating
     Ogre::SceneNode *mPlayerNode;                // The SceneNode that the Entity is attached to
     std::deque<Ogre::Vector3> mWalkList;   // The list of points we are walking to
-    std::vector<Ogre::Entity> mBoxEntities;
-    std::vector<Ogre::SceneNode> mBoxNodes;
     bool mCameraLocked;
 
     Ogre::Real mWalkSpeed;                 // The speed at which the object is moving
