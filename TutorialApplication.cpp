@@ -41,10 +41,7 @@ void TutorialApplication::createScene(void)
     createTerrain();
     createPlayer();
     
-    // Create the walking list
-    mWalkList.push_back(Ogre::Vector3(200.0f,  10.0f,  35.0f ));
-    mWalkList.push_back(Ogre::Vector3(0.0f, 10.0f,  35.0f ));
-    mWalkList.push_back(Ogre::Vector3(200.0f,  10.0f, 35.0f));
+   
     
     // Set the camera to look at our handiwork
     mCamera->setPosition(90.0f, CAMERA_Y, CAMERA_Z);
@@ -231,6 +228,18 @@ void TutorialApplication::movePlayer(const Ogre::FrameEvent &evt)
     
 }
 
+void TutorialApplication::movePlayerLeft(void)
+{
+    Ogre::Vector3 vector;
+    vector = mPlayerNode->getPosition();
+
+    Ogre::Quaternion q(Ogre::Degree(180), vector.NEGATIVE_UNIT_Y);
+    mPlayerNode->setOrientation(q);
+    vector.x = vector.x -10;
+    
+    mWalkList.insert(mWalkList.begin(), vector);
+}
+
 void TutorialApplication::jumpPlayer(void)
 {
     
@@ -251,8 +260,9 @@ bool TutorialApplication::keyPressed(const OIS::KeyEvent &arg)
         case OIS::KC_SPACE:
                 jumpPlayer();
         break;
-    
-                
+        case OIS::KC_A:
+        movePlayerLeft();
+        break;
     }
     return ret;
 }
