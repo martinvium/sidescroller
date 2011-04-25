@@ -6,7 +6,12 @@ A short description will come whenever
 Application is very simple, and starts a gamestate, that contains all the 
 initialization currently in application.
 
-## Entity Components ?
+[Further reading](http://www.ogre3d.org/tikiwiki/Managing+Game+States+with+OGRE)
+
+## Entity Components
+[Further reading](http://www.ogre3d.org/forums/viewtopic.php?f=1&t=53302) and 
+[even further](http://stackoverflow.com/questions/1901251/component-based-game-engine-design).
+
 ```cpp
 EntityComponents/MoveComponent
 EntityComponents/MoveComponentManager
