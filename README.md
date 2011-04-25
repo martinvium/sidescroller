@@ -1,7 +1,6 @@
 # Awesome Sidescroller #1
 A short description will come whenever
 
-# TODO
 ## GameStates
 Application is very simple, and starts a gamestate, that contains all the 
 initialization currently in application.
